@@ -15,9 +15,9 @@ console.log("Visible nodes for '2026':", visible);
 
 // Search for something matching nothing
 await page.locator(".search-input").fill("zzz-nope");
-await page.waitForTimeout(200);
-const noResults = await page.locator(".no-results").textContent();
-console.log("No results message:", noResults);
+await page.waitForTimeout(400);
+const noResults = await page.locator(".no-results").allTextContents();
+console.log("No results messages:", noResults);
 
 // Search for "Work" -> should show Work + ancestors (Documents) + descendant Reports/2026
 await page.locator(".search-input").fill("Work");

@@ -19,9 +19,7 @@ await page.waitForTimeout(300);
 let rightItems = await page.locator(".right-panel .item").allTextContents();
 console.log("Documents children:", rightItems);
 
-// Expand Documents -> Work -> click "Work" -> right panel should show Reports
-await page.locator(".folder-row .toggle", { hasText: "▶" }).first().click();
-await page.waitForTimeout(200);
+// Documents already auto-expanded (selected) -> click "Work" -> right panel should show Reports
 await page.locator(".folder-row .name", { hasText: "Work" }).click();
 await page.waitForTimeout(300);
 rightItems = await page.locator(".right-panel .item").allTextContents();
@@ -33,10 +31,11 @@ await page.waitForTimeout(300);
 rightItems = await page.locator(".right-panel .item").allTextContents();
 console.log("Personal children (should include file):", rightItems);
 
-// Click empty folder "Vacation" parent "Pictures" expand first
-await page.locator(".folder-row .toggle", { hasText: "▶" }).first().click();
+// Click "Pictures" -> auto-expands -> "Vacation" should become visible
+await page.locator(".folder-row .name", { hasText: "Pictures" }).click();
 await page.waitForTimeout(200);
-await page.locator(".folder-row .name", { hasText: "2026" }).first().isVisible().catch(() => {});
+const vacationVisible = await page.locator(".folder-row .name", { hasText: "Vacation" }).first().isVisible();
+console.log("Vacation visible after expanding Pictures:", vacationVisible);
 
 await page.screenshot({ path: "/tmp/explorer-screenshot.png", fullPage: true });
 
