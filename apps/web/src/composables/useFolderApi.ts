@@ -1,6 +1,8 @@
 import type { FolderTreeNode, FolderChildrenResponse, FileSearchResult } from "@shared/types";
 
-const API_BASE = "/api/v1/folders";
+// In dev, "/api" is proxied to the local API server (see vite.config.ts).
+// In production, set VITE_API_BASE to the deployed API URL (e.g. https://api.example.com).
+const API_BASE = `${import.meta.env.VITE_API_BASE ?? ""}/api/v1/folders`;
 
 export function useFolderApi() {
   async function getTree(): Promise<FolderTreeNode[]> {
