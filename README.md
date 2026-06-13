@@ -99,36 +99,13 @@ cd apps/web && bun run test
 - `GET /api/v1/folders/:id/children` — subfolder + file langsung di bawah folder `:id`
 - `GET /api/v1/folders/files/search?q=` — cari file by nama (case-insensitive, partial match)
 
-## Deploy (Render + Netlify)
+## Demo (Netlify, mock data)
 
-Backend + DB di **Render**, frontend di **Netlify**.
+Live demo: https://infokes-file-exlorer.netlify.app/
 
-### 1. Backend + DB → Render
+Repo udah ada `netlify.toml` di root (base dir `apps/web`, build `vite build`, publish `dist`, SPA redirect ke `index.html`). Build di-set `VITE_USE_MOCK=true`, jadi frontend pakai data statis (`apps/web/src/composables/mockData.ts`, mirror dari seed data) tanpa butuh backend/DB sama sekali — cukup connect repo ke Netlify dan deploy.
 
-Repo udah ada `render.yaml` (Blueprint) di root — bikin 1 web service `explorer-api` + 1 Postgres `explorer-db` otomatis:
-
-1. Render dashboard → **New** → **Blueprint** → connect repo `infokes-file-exlorer`.
-2. Render baca `render.yaml`, bikin DB + web service. `DATABASE_URL` otomatis di-link dari DB ke service.
-3. Setelah deploy pertama selesai, jalankan seed sekali lewat Shell tab service `explorer-api`:
-   ```bash
-   bun run db:seed
-   ```
-4. Catat URL publik service (`https://explorer-api-xxxx.onrender.com`) — dipakai di step 2.
-
-> Free plan Render: service sleep kalau idle, request pertama setelah idle bakal lambat (cold start).
-
-### 2. Frontend → Netlify
-
-Repo udah ada `netlify.toml` di root (base dir `apps/web`, build `vite build`, publish `dist`, SPA redirect ke `index.html`).
-
-1. Netlify dashboard → **Add new site** → **Import an existing project** → connect repo `infokes-file-exlorer`.
-2. Build settings ke-detect otomatis dari `netlify.toml`.
-3. Tambah environment variable: `VITE_API_BASE` = URL service Render dari step 1 (contoh `https://explorer-api-xxxx.onrender.com`). **Harus diset sebelum build** karena Vite inline env saat build time.
-4. Deploy. Buka URL Netlify-nya.
-
-### Catatan
-- Kode udah disiapkan: API listen di `0.0.0.0:$PORT` (env Render) + CORS enabled; frontend baca `VITE_API_BASE` buat tentuin base URL API (kosong = relative, cuma valid kalau di-proxy/domain sama).
-- Push ulang/redeploy site Netlify tiap kali `VITE_API_BASE` berubah (perlu rebuild).
+Untuk pakai backend/DB asli (bukan mock): hapus/ubah `VITE_USE_MOCK` jadi `false` dan set `VITE_API_BASE` ke URL API yang udah running (lihat bagian "Menjalankan dev server" buat jalanin API + DB sendiri).
 
 ## Dokumentasi tambahan
 

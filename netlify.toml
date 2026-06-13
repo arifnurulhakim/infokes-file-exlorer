@@ -3,6 +3,9 @@
   command = "cd ../.. && bun install && cd apps/web && bun run build"
   publish = "dist"
 
+[build.environment]
+  VITE_USE_MOCK = "true"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
