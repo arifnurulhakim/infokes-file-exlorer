@@ -1,6 +1,6 @@
 # Windows Explorer Clone — Planning Document
 
-**Status:** Not started
+**Status:** Done
 **Date:** 2026-06-13
 **Project Name:** Windows Explorer Take-Home Test
 **Directory:** `/test infokes`
@@ -114,26 +114,26 @@ apps/web/src/
 
 ### Phase 1 — Project Setup
 
-- [ ] 1. Setup monorepo (Bun workspaces) — `apps/api`, `apps/web`, `packages/shared`
-- [ ] 2. DB schema (`folders`, `files`) + Drizzle migration + seed data nested 3+ level
+- [x] 1. Setup monorepo (Bun workspaces) — `apps/api`, `apps/web`, `packages/shared`
+- [x] 2. DB schema (`folders`, `files`) + Drizzle migration + seed data nested 3+ level
 
 ### Phase 2 — Backend Core
 
-- [ ] 3. Connect db, `folder.repository.ts` (findAll, findChildren, findFilesByFolder)
-- [ ] 4. `folder.service.ts` — algoritma `getTree()` (O(n) map+recursive build) + `getChildren()`
-- [ ] 5. Routes `GET /api/v1/folders/tree`, `GET /api/v1/folders/:id/children`
+- [x] 3. Connect db, `folder.repository.ts` (findAll, findChildren, findFilesByFolder)
+- [x] 4. `folder.service.ts` — algoritma `getTree()` (O(n) map+recursive build) + `getChildren()`
+- [x] 5. Routes `GET /api/v1/folders/tree`, `GET /api/v1/folders/:id/children`
 
 ### Phase 3 — Frontend Core
 
-- [ ] 6. Setup Vue 3 + Vite, shared types dari `packages/shared`
-- [ ] 7. `FolderTreeNode.vue` recursive component + `FolderTree.vue` wrapper
-- [ ] 8. `App.vue` layout 2 panel + `useFolderApi.ts`
+- [x] 6. Setup Vue 3 + Vite, shared types dari `packages/shared`
+- [x] 7. `FolderTreeNode.vue` recursive component + `FolderTree.vue` wrapper
+- [x] 8. `App.vue` layout 2 panel + `useFolderApi.ts`
 
 ### Phase 4 — Wiring & UX Core
 
-- [ ] 9. Load tree on mount → render kiri
-- [ ] 10. Klik folder kiri → fetch `/:id/children` → render kanan + highlight selected
-- [ ] 11. Empty state: folder tanpa subfolder → "Folder ini kosong"
+- [x] 9. Load tree on mount → render kiri
+- [x] 10. Klik folder kiri → fetch `/:id/children` → render kanan + highlight selected
+- [x] 11. Empty state: folder tanpa subfolder → "Folder ini kosong"
 
 **Phase 1–4 = core, wajib selesai dulu sebelum Phase 5.**
 
