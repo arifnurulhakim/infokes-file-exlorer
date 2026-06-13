@@ -70,8 +70,7 @@ Buka URL frontend di browser. Vite proxy `/api` ke backend (port 3001), jadi cuk
 Pastikan dev server api + web udah jalan (lihat bagian "Menjalankan dev server"), lalu jalankan dari root:
 
 ```bash
-bun run e2e-check.ts    # cek tree + klik folder, lihat isi panel kanan
-bun run e2e-search.ts   # cek search folder (auto-expand & no-results)
+bun run e2e.ts   # cek tree, klik folder, isi panel kanan, search (auto-expand & no-results)
 ```
 
 Script ini pakai Playwright (`chromium.launch()`), browser headless dibuka otomatis ke `http://localhost:5173` dan hasil di-print ke console.
