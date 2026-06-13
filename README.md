@@ -2,6 +2,8 @@
 
 2-panel folder browser: panel kiri = full folder tree (expand/collapse + search), panel kanan = subfolder & file dari folder yang dipilih.
 
+**Live demo:** https://infokes-file-exlorer.netlify.app/
+
 ## Stack
 
 - **Monorepo**: Bun workspaces (`apps/api`, `apps/web`, `packages/shared`)
@@ -98,14 +100,6 @@ cd apps/web && bun run test
 - `GET /api/v1/folders/tree` — full folder tree
 - `GET /api/v1/folders/:id/children` — subfolder + file langsung di bawah folder `:id`
 - `GET /api/v1/folders/files/search?q=` — cari file by nama (case-insensitive, partial match)
-
-## Demo (Netlify, mock data)
-
-Live demo: https://infokes-file-exlorer.netlify.app/
-
-Repo udah ada `netlify.toml` di root (base dir `apps/web`, build `vite build`, publish `dist`, SPA redirect ke `index.html`). Build di-set `VITE_USE_MOCK=true`, jadi frontend pakai data statis (`apps/web/src/composables/mockData.ts`, mirror dari seed data) tanpa butuh backend/DB sama sekali — cukup connect repo ke Netlify dan deploy.
-
-Untuk pakai backend/DB asli (bukan mock): hapus/ubah `VITE_USE_MOCK` jadi `false` dan set `VITE_API_BASE` ke URL API yang udah running (lihat bagian "Menjalankan dev server" buat jalanin API + DB sendiri).
 
 ## Dokumentasi tambahan
 
