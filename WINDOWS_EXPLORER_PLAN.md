@@ -142,6 +142,7 @@ apps/web/src/
 - [x] 12. Expand/collapse toggle (▶/▼) di folder kiri
 - [x] 13. Tampilkan files di panel kanan (icon beda dari folder)
 - [x] 14. Search box — filter tree client-side + auto-expand ancestor + highlight
+- [x] 14b. File search — `GET /api/v1/folders/files/search?q=` (ilike, case-insensitive), hasil di bawah tree, klik → buka & auto-expand ke folder asalnya
 
 ### Phase 6 — Bonus Testing
 
