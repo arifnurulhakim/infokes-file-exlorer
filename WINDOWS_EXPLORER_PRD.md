@@ -1,6 +1,6 @@
 # Windows Explorer Clone — PRD (Product Requirements Document)
 
-**Status:** Draft
+**Status:** Implemented
 **Date:** 2026-06-13
 **Project:** Windows Explorer Take-Home Test
 **Source:** `Copy of 17122024 - Web Developer's take home test.docx.md`
@@ -74,7 +74,8 @@ User butuh cara navigasi folder bertingkat (unlimited depth) mirip File/Windows 
 
 ### FR6 (Bonus) — Search
 - Input search di atas panel kiri.
-- Filter tree client-side (match nama folder, highlight + auto-expand ancestor) ATAU endpoint `GET /api/v1/folders/search?q=`.
+- Filter tree client-side (match nama folder, highlight + auto-expand ancestor).
+- File search via `GET /api/v1/folders/files/search?q=` (case-insensitive, partial match), hasil tampil di bawah tree dengan nama folder asalnya; klik hasil → buka & highlight folder tersebut.
 
 ---
 
@@ -96,6 +97,9 @@ GET /api/v1/folders/tree
 GET /api/v1/folders/:id/children
 → 200: { subfolders: Folder[], files: FileEntry[] }
 → 404: folder tidak ditemukan
+
+GET /api/v1/folders/files/search?q=
+→ 200: FileSearchResult[]  (FileEntry + folderName)
 ```
 
 Lihat tipe lengkap di `WINDOWS_EXPLORER_BLUEPRINT.md` § 5.
@@ -104,20 +108,21 @@ Lihat tipe lengkap di `WINDOWS_EXPLORER_BLUEPRINT.md` § 5.
 
 ## 8. Success Criteria / Acceptance Test
 
-- [ ] Buka halaman → panel kiri tampil seluruh folder tree (cek dgn data seed minimal 3 level dalam).
-- [ ] Klik folder manapun → panel kanan tampil subfolder langsung (benar, bukan semua descendant).
-- [ ] Klik folder tanpa subfolder → panel kanan kosong/"folder ini kosong".
-- [ ] Refresh halaman → tree ke-render ulang dari API, bukan cache statis.
-- [ ] (bonus) toggle expand/collapse jalan tanpa fetch ulang.
-- [ ] (bonus) files muncul di panel kanan kalau ada.
-- [ ] (bonus) search nemu folder by nama parsial, case-insensitive.
+- [x] Buka halaman → panel kiri tampil seluruh folder tree (cek dgn data seed minimal 3 level dalam).
+- [x] Klik folder manapun → panel kanan tampil subfolder langsung (benar, bukan semua descendant).
+- [x] Klik folder tanpa subfolder → panel kanan kosong/"folder ini kosong".
+- [x] Refresh halaman → tree ke-render ulang dari API, bukan cache statis.
+- [x] (bonus) toggle expand/collapse jalan tanpa fetch ulang.
+- [x] (bonus) files muncul di panel kanan kalau ada.
+- [x] (bonus) search nemu folder by nama parsial, case-insensitive.
+- [x] (bonus) search nemu file by nama parsial, klik hasil buka folder asalnya + auto-expand tree.
 
 ---
 
-## 9. Open Questions
+## 9. Open Questions (resolved)
 
-- Apakah perlu breadcrumb path di panel kanan? (tidak diminta, tapi UX-friendly — pertimbangkan kalau waktu cukup)
-- Apakah file size perlu ditampilkan formatted (KB/MB) di FR4? (nice-to-have)
+- Breadcrumb path di panel kanan? → Diimplementasi sederhana sebagai path-bar (nama folder terpilih).
+- File size formatted (KB/MB)? → Ya, diimplementasi (`formatSize` di `FolderContents.vue`).
 
 ---
 

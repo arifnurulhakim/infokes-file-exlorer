@@ -3,7 +3,7 @@
 > Take-home test: Windows Explorer-like 2-panel folder browser
 > Stack: Bun + Elysia + TypeScript + PostgreSQL + Drizzle + Vue 3 (Composition API)
 > Directory: `/test infokes`
-> Status: Planning done, implementation not started
+> Status: Implemented (see § 10 Roadmap)
 
 ---
 
@@ -205,6 +205,10 @@ import { Elysia } from "elysia";
 export const folderRoutes = new Elysia({ prefix: "/api/v1/folders" })
   .get("/tree", async ({ folderService }) => {
     return await folderService.getTree();
+  })
+  .get("/files/search", async ({ query, folderService }) => {
+    // bonus: case-insensitive partial match on file name
+    return await folderService.searchFiles(query.q ?? "");
   })
   .get("/:id/children", async ({ params, folderService }) => {
     return await folderService.getChildren(Number(params.id));
