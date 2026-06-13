@@ -65,6 +65,17 @@ bun run dev:web   # -> http://localhost:5173 (atau port lain kalau 5173 dipakai)
 
 Buka URL frontend di browser. Vite proxy `/api` ke backend (port 3001), jadi cukup buka 1 URL.
 
+## E2E Testing (Playwright)
+
+Pastikan dev server api + web udah jalan (lihat bagian "Menjalankan dev server"), lalu jalankan dari root:
+
+```bash
+bun run e2e-check.ts    # cek tree + klik folder, lihat isi panel kanan
+bun run e2e-search.ts   # cek search folder (auto-expand & no-results)
+```
+
+Script ini pakai Playwright (`chromium.launch()`), browser headless dibuka otomatis ke `http://localhost:5173` dan hasil di-print ke console.
+
 ## Testing
 
 ```bash
