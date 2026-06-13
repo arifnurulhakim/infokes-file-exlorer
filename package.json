@@ -1,0 +1,15 @@
+{
+  "name": "windows-explorer-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "cd apps/api && bun run dev",
+    "dev:web": "cd apps/web && bun run dev"
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
+}
