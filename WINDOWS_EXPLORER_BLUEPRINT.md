@@ -132,7 +132,12 @@ export interface FileEntry {
   id: number;
   name: string;
   folderId: number;
-  sizeBytes: number;
+  sizeBytes: number | null;
+}
+
+// bonus: file search result, dipakai oleh GET /files/search
+export interface FileSearchResult extends FileEntry {
+  folderName: string;
 }
 ```
 
@@ -157,6 +162,15 @@ export class FolderRepository {
   async findFilesByFolder(folderId: number): Promise<FileEntry[]> {
     return db.select().from(files)
       .where(eq(files.folderId, folderId))
+      .orderBy(files.name);
+  }
+
+  // bonus: file search by name, join ke folders buat dapat folderName
+  async searchFiles(query: string): Promise<FileSearchResult[]> {
+    return db.select({ ...filesColumns, folderName: folders.name })
+      .from(files)
+      .innerJoin(folders, eq(files.folderId, folders.id))
+      .where(ilike(files.name, `%${query}%`))
       .orderBy(files.name);
   }
 }
@@ -222,7 +236,7 @@ export const folderRoutes = new Elysia({ prefix: "/api/v1/folders" })
 ### `useFolderApi.ts`
 
 ```typescript
-import type { FolderTreeNode, Folder, FileEntry } from "@shared/types";
+import type { FolderTreeNode, Folder, FileEntry, FileSearchResult } from "@shared/types";
 
 const API_BASE = "/api/v1/folders";
 
@@ -233,7 +247,12 @@ export function useFolderApi() {
     fetch(`${API_BASE}/${id}/children`)
       .then(r => r.json() as Promise<{ subfolders: Folder[]; files: FileEntry[] }>);
 
-  return { getTree, getChildren };
+  // bonus: file search
+  const searchFiles = (q: string) =>
+    fetch(`${API_BASE}/files/search?q=${encodeURIComponent(q)}`)
+      .then(r => r.json() as Promise<FileSearchResult[]>);
+
+  return { getTree, getChildren, searchFiles };
 }
 ```
 
