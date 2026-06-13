@@ -67,13 +67,19 @@ Buka URL frontend di browser. Vite proxy `/api` ke backend (port 3001), jadi cuk
 
 ## E2E Testing (Playwright)
 
-Pastikan dev server api + web udah jalan (lihat bagian "Menjalankan dev server"), lalu jalankan dari root:
+Install browser Playwright sekali (kalau belum):
+
+```bash
+bunx playwright install chromium
+```
+
+Pastikan dev server api + web udah jalan di port default (5173 & 3001) — lihat bagian "Menjalankan dev server", lalu jalankan dari root:
 
 ```bash
 bun run e2e.ts   # cek tree, klik folder, isi panel kanan, search (auto-expand & no-results)
 ```
 
-Script ini pakai Playwright (`chromium.launch()`), browser headless dibuka otomatis ke `http://localhost:5173` dan hasil di-print ke console.
+Script ini pakai Playwright (`chromium.launch()`), browser headless dibuka otomatis ke `http://localhost:5173` dan hasil di-print ke console. Kalau port 5173 lagi dipakai (vite auto-pindah ke 5174 dst), edit URL di `e2e.ts` sesuai port yang aktif.
 
 ## Testing
 
