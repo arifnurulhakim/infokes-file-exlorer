@@ -99,26 +99,36 @@ cd apps/web && bun run test
 - `GET /api/v1/folders/:id/children` — subfolder + file langsung di bawah folder `:id`
 - `GET /api/v1/folders/files/search?q=` — cari file by nama (case-insensitive, partial match)
 
-## Deploy ke Railway
+## Deploy (Render + Netlify)
 
-1 project Railway, 3 service:
+Backend + DB di **Render**, frontend di **Netlify**.
 
-1. **Postgres** — Add plugin "PostgreSQL" (otomatis kasih `DATABASE_URL`).
+### 1. Backend + DB → Render
 
-2. **Service `api`**
-   - Root Directory: `apps/api` (config-as-code `railway.json` udah ada di sana — build = `bun install` di root monorepo, start = jalankan migration lalu `src/index.ts`).
-   - Env var: `DATABASE_URL` → reference dari plugin Postgres (`${{Postgres.DATABASE_URL}}`).
-   - Setelah deploy pertama, jalankan seed sekali: `railway run --service api bun run db:seed` (atau lewat shell Railway).
-   - Catat domain publiknya (generate domain di Settings → Networking).
+Repo udah ada `render.yaml` (Blueprint) di root — bikin 1 web service `explorer-api` + 1 Postgres `explorer-db` otomatis:
 
-3. **Service `web`**
-   - Root Directory: `apps/web` (config-as-code `railway.json` ada di sana — build = `vite build`, start = serve static `dist` pakai `serve`).
-   - Env var: `VITE_API_BASE` = domain service `api` dari langkah 2 (contoh `https://api-xxxx.up.railway.app`), **harus diset sebelum build** karena Vite inline env saat build time.
-   - Generate domain di Settings → Networking → ini yang dibuka user.
+1. Render dashboard → **New** → **Blueprint** → connect repo `infokes-file-exlorer`.
+2. Render baca `render.yaml`, bikin DB + web service. `DATABASE_URL` otomatis di-link dari DB ke service.
+3. Setelah deploy pertama selesai, jalankan seed sekali lewat Shell tab service `explorer-api`:
+   ```bash
+   bun run db:seed
+   ```
+4. Catat URL publik service (`https://explorer-api-xxxx.onrender.com`) — dipakai di step 2.
+
+> Free plan Render: service sleep kalau idle, request pertama setelah idle bakal lambat (cold start).
+
+### 2. Frontend → Netlify
+
+Repo udah ada `netlify.toml` di root (base dir `apps/web`, build `vite build`, publish `dist`, SPA redirect ke `index.html`).
+
+1. Netlify dashboard → **Add new site** → **Import an existing project** → connect repo `infokes-file-exlorer`.
+2. Build settings ke-detect otomatis dari `netlify.toml`.
+3. Tambah environment variable: `VITE_API_BASE` = URL service Render dari step 1 (contoh `https://explorer-api-xxxx.onrender.com`). **Harus diset sebelum build** karena Vite inline env saat build time.
+4. Deploy. Buka URL Netlify-nya.
 
 ### Catatan
-- Kode udah disiapkan: API listen di `0.0.0.0:$PORT` (env Railway) + CORS enabled; frontend baca `VITE_API_BASE` buat tentuin base URL API (kosong = relative, cuma valid kalau di-proxy/domain sama).
-- Push ulang/redeploy tiap kali env var di service `web` berubah (perlu rebuild).
+- Kode udah disiapkan: API listen di `0.0.0.0:$PORT` (env Render) + CORS enabled; frontend baca `VITE_API_BASE` buat tentuin base URL API (kosong = relative, cuma valid kalau di-proxy/domain sama).
+- Push ulang/redeploy site Netlify tiap kali `VITE_API_BASE` berubah (perlu rebuild).
 
 ## Dokumentasi tambahan
 
